@@ -1,0 +1,31 @@
+# User
+
+getAllUser: (GET) http://localhost:8080/api/pintoeat-user/getAll
+getUserById: (GET) http://localhost:8080/api/pintoeat-user/getById/{id}
+addUser: (POST) http://localhost:8080/api/pintoeat-user/addUpdate
+editUser: (POST) http://localhost:8080/api/pintoeat-user/addUpdate
+deleteUserById: (GET) http://localhost:8080/api/pintoeat-user/deleteById/{id}
+
+# Folder
+
+getAllFolder: (GET) http://localhost:8080/api/pintoeat-folder/getAll
+getFolderById: (GET) http://localhost:8080/api/pintoeat-folder/getById/{id}
+addFolder: (POST) http://localhost:8080/api/pintoeat-folder/addUpdate
+editFolder: (POST) http://localhost:8080/api/pintoeat-folder/addUpdate
+deleteFolderById: (GET) http://localhost:8080/api/pintoeat-folder/deleteById/{id}
+
+# Pin
+
+getAllPin: (GET) http://localhost:8080/api/pintoeat-pin/getAll
+getPinById: (GET) http://localhost:8080/api/pintoeat-pin/getById/{id}
+addPin: (POST) http://localhost:8080/api/pintoeat-pin/addUpdate
+editPin: (POST) http://localhost:8080/api/pintoeat-pin/addUpdate
+deletePinById: (GET) http://localhost:8080/api/pintoeat-pin/deleteById/{id}
+
+# Image
+
+--------------------------------------------------------------------------------
+
+*** addUpdate ถ้า body ที่ส่งมามี id เป็น null จะเป็นการ insert 
+*** addUpdate ถ้า body ที่ส่งมามีค่า id มาด้วยจะเป็นการ update 
+
