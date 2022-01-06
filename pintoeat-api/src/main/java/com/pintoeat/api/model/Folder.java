@@ -33,11 +33,8 @@ public class Folder implements Serializable {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "name_en") 
-	private String nameEn;
-	
-	@Column(name = "name_th") 
-	private String nameTh;
+	@Column(name = "name") 
+	private String name;
 	
 	@Column(name = "is_favorite") 
 	private boolean isFavorite;
@@ -66,8 +63,7 @@ public class Folder implements Serializable {
 	
 	public Folder(FolderPojo folderPojo) {
 		this.id = folderPojo.getId();
-		this.nameEn = folderPojo.getNameEn();
-		this.nameTh = folderPojo.getNameTh();
+		this.name = folderPojo.getName();
 		this.isFavorite = folderPojo.isFavorite();
 		this.createdAt = folderPojo.getCreatedAt();
 		this.updatedAt = folderPojo.getUpdatedAt();
@@ -82,20 +78,12 @@ public class Folder implements Serializable {
 		this.id = id;
 	}
 
-	public String getNameEn() {
-		return nameEn;
+	public String getName() {
+		return name;
 	}
 
-	public void setNameEn(String nameEn) {
-		this.nameEn = nameEn;
-	}
-
-	public String getNameTh() {
-		return nameTh;
-	}
-
-	public void setNameTh(String nameTh) {
-		this.nameTh = nameTh;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public boolean isFavorite() {

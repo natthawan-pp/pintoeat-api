@@ -34,7 +34,7 @@ public class Image implements Serializable {
 	private String id;
 
 	@Column(name = "image") 
-	private Blob image;
+	private byte[] image;
 	
 	@Column(name = "priority")
 	private Integer priority;
@@ -69,12 +69,12 @@ public class Image implements Serializable {
 	}
 
 
-	public Blob getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
 
-	public void setImage(Blob image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}
 

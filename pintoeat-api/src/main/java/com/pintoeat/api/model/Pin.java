@@ -33,17 +33,11 @@ public class Pin implements Serializable {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "name_en") 
-	private String nameEn;
+	@Column(name = "name") 
+	private String name;
 	
-	@Column(name = "name_th") 
-	private String nameTh;
-	
-	@Column(name = "description_en") 
-	private String descriptionEn;
-	
-	@Column(name = "description_th") 
-	private String descriptionTh;
+	@Column(name = "description") 
+	private String description;
 	
 	@Column(name = "location") 
 	private String location;
@@ -78,10 +72,8 @@ public class Pin implements Serializable {
 	
 	public Pin(PinPojo pinPojo) {
 		this.id = pinPojo.getId();
-		this.nameEn = pinPojo.getNameEn();
-		this.nameTh = pinPojo.getNameTh();
-		this.descriptionEn = pinPojo.getDescriptionEn();
-		this.descriptionTh = pinPojo.getDescriptionTh();
+		this.name = pinPojo.getName();
+		this.description = pinPojo.getDescription();
 		this.location = pinPojo.getLocation();
 		this.isFavorite = pinPojo.isFavorite();
 		this.isBookmark = pinPojo.isBookmark();
@@ -98,36 +90,21 @@ public class Pin implements Serializable {
 		this.id = id;
 	}
 
-	public String getNameEn() {
-		return nameEn;
+	public String getName() {
+		return name;
 	}
 
-	public void setNameEn(String nameEn) {
-		this.nameEn = nameEn;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getNameTh() {
-		return nameTh;
+
+	public String getDescription() {
+		return description;
 	}
 
-	public void setNameTh(String nameTh) {
-		this.nameTh = nameTh;
-	}
-
-	public String getDescriptionEn() {
-		return descriptionEn;
-	}
-
-	public void setDescriptionEn(String descriptionEn) {
-		this.descriptionEn = descriptionEn;
-	}
-
-	public String getDescriptionTh() {
-		return descriptionTh;
-	}
-
-	public void setDescriptionTh(String descriptionTh) {
-		this.descriptionTh = descriptionTh;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getLocation() {

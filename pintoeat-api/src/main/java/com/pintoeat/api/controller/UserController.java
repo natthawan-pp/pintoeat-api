@@ -1,9 +1,12 @@
 package com.pintoeat.api.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -15,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pintoeat.api.model.Folder;
 import com.pintoeat.api.model.User;
-import com.pintoeat.api.pojo.PoAddUpdateOutput;
+import com.pintoeat.api.pojo.AddUpdateOutput;
 import com.pintoeat.api.pojo.UserPojo;
 import com.pintoeat.api.repository.UserRepository;
 import com.pintoeat.api.utils.Utils;
+
 
 @RestController
 @RequestMapping("/api/pintoeat-user")
@@ -64,19 +69,120 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/getByEmail/{email}", method = RequestMethod.GET)
+	public User getByEmail(@PathVariable("email") String email, HttpServletRequest request) {
+		long start = System.currentTimeMillis();
+		User result = new User();
+
+		try {
+			result = userRepo.findByemail(email);
+			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
+		} catch (Exception e) {
+			long finish = System.currentTimeMillis();
+			long timeElapsed = finish - start;
+			logger.error(e.getMessage());
+			cdrLogger.error(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.ERROR_CODE, e.getMessage(), timeElapsed));
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/getByEmailAndPassword/{email}/{password}", method = RequestMethod.GET)
+	public User getByEmailAndPassword(@PathVariable("email") String email, @PathVariable("password") String password,
+			HttpServletRequest request) {
+		long start = System.currentTimeMillis();
+		User result = new User();
+
+		try {
+			result = userRepo.findByemailAndPassword(email, password);
+			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
+		} catch (Exception e) {
+			long finish = System.currentTimeMillis();
+			long timeElapsed = finish - start;
+			logger.error(e.getMessage());
+			cdrLogger.error(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.ERROR_CODE, e.getMessage(), timeElapsed));
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/loginUser/{email}/{password}", method = RequestMethod.GET)
+	public @ResponseBody AddUpdateOutput loginUser(@PathVariable("email") String email, @PathVariable("password") String password,
+			HttpServletRequest request) {
+		long start = System.currentTimeMillis();
+		AddUpdateOutput result = new AddUpdateOutput();
+		User user = new User();
+
+		try {
+			user = userRepo.findByemailAndPassword(email, password);
+			request.getSession().invalidate();
+			
+			if (user != null) {
+				result.setRowId(user.getId());
+				request.getSession().setAttribute("USER_ID", user.getId());
+				result.setResponseMsg("Login Success");
+//				String messages = (String) request.getSession().getAttribute("USER_ID");
+			} else {
+				result.setRowId(email);
+				result.setResponseMsg("Invalid Email or Password");
+			}
+				
+			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
+			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
+		} catch (Exception e) {
+			long finish = System.currentTimeMillis();
+			long timeElapsed = finish - start;
+			logger.error(e.getMessage());
+			cdrLogger.error(Utils.printCdrLog(request.getRemoteAddr(),
+					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
+					Utils.ERROR_CODE, e.getMessage(), timeElapsed));
+		}
+		return result;
+	}
+	
+		
 
 	@Transactional
 	@RequestMapping(value = "/addUpdate", method = RequestMethod.POST)
-	public @ResponseBody PoAddUpdateOutput addUpdate(@RequestBody UserPojo pojo, HttpServletRequest request) {
+	public @ResponseBody AddUpdateOutput addUpdate(@RequestBody UserPojo pojo, HttpServletRequest request) {
 		long start = System.currentTimeMillis();
-		PoAddUpdateOutput result = new PoAddUpdateOutput();
+		AddUpdateOutput result = new AddUpdateOutput();
 		User body = new User(pojo);
+		boolean checkNewUser = false;
 		
 		try {
 			if (body != null) {
 				if (body.getId() == null) {
 					body.setId(Utils.UUID());
+					body.setCreatedAt(new Date());
+					checkNewUser = true;
 				}
+				body.setUpdatedAt(new Date());
+				
+				if (checkNewUser == true) {
+					// add default folder when create new user
+					List<Folder> folderList = new ArrayList<Folder>();
+					Folder folder = new Folder();
+					folder.setId(Utils.UUID());
+					folder.setUserId(body);
+					folder.setName("Default Folder");
+					folder.setCreatedAt(new Date());
+					folder.setUpdatedAt(new Date());
+					folderList.add(folder);
+					body.setFolder(folderList);
+				}
+				
 
 				userRepo.save(body);
 				result.setRowId(body.getId());
@@ -96,10 +202,10 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
-	public @ResponseBody PoAddUpdateOutput deleteById(@PathVariable("id") String id,
+	public @ResponseBody AddUpdateOutput deleteById(@PathVariable("id") String id,
 			HttpServletRequest request) {
 		long start = System.currentTimeMillis();
-		PoAddUpdateOutput result = new PoAddUpdateOutput();
+		AddUpdateOutput result = new AddUpdateOutput();
 		User user = new User();
 
 		try {
@@ -128,6 +234,7 @@ public class UserController {
 		return result;
 	}
 	
+
 
 }
 

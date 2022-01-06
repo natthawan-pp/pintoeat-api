@@ -36,10 +36,7 @@ public class User implements Serializable {
 	private String email;
 	
 	@Column(name = "password")
-	private Integer password;
-	
-	@Column(name = "gender")
-	private String gender;
+	private String password;
 	
 	@Column(name = "is_confirm_email") 
 	private boolean isConFirmEmail;
@@ -49,9 +46,6 @@ public class User implements Serializable {
 	
 	@Column(name = "is_login_by_gmail") 
 	private boolean isLoginByGmail;
-	
-	@Column(name = "image") 
-	private Blob image;
 	
 	@Temporal(TemporalType.DATE) 
 	@Column(name = "created_at")
@@ -74,11 +68,9 @@ public class User implements Serializable {
 		this.id = userPojo.getId();
 		this.email = userPojo.getEmail();
 		this.password = userPojo.getPassword();
-		this.gender = userPojo.getGender();
 		this.isConFirmEmail = userPojo.isConFirmEmail();
 		this.isLoginByFaceBook = userPojo.isLoginByFaceBook();
 		this.isLoginByGmail = userPojo.isLoginByGmail();
-		this.image = userPojo.getImage();
 		this.createdAt = userPojo.getCreatedAt();
 		this.updatedAt = userPojo.getUpdatedAt();
 		this.folder = userPojo.getFolder();
@@ -104,23 +96,13 @@ public class User implements Serializable {
 	}
 
 
-	public Integer getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
 
-	public void setPassword(Integer password) {
+	public void setPassword(String password) {
 		this.password = password;
-	}
-
-
-	public String getGender() {
-		return gender;
-	}
-
-
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 
@@ -152,17 +134,6 @@ public class User implements Serializable {
 	public void setLoginByGmail(boolean isLoginByGmail) {
 		this.isLoginByGmail = isLoginByGmail;
 	}
-
-
-	public Blob getImage() {
-		return image;
-	}
-
-
-	public void setImage(Blob image) {
-		this.image = image;
-	}
-
 
 	public Date getCreatedAt() {
 		return createdAt;
