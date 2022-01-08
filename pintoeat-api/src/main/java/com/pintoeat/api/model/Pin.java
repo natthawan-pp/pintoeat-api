@@ -56,20 +56,24 @@ public class Pin implements Serializable {
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-	//bi-directional many-to-one association to DcCampaign
-	@ManyToOne
-	@JoinColumn(name="folder_id")
-	@JsonBackReference
-	private Folder folderId;
+	@Column(name = "folder_id")
+	private String folderId;
+	
+//	//bi-directional many-to-one association to Folder
+//	@ManyToOne
+//	@JoinColumn(name="folder_id")
+//	@JsonBackReference
+//	private Folder folderId;
 	
 	@OneToMany(mappedBy = "pinId", cascade = CascadeType.MERGE)
-	@JsonManagedReference
+//	@JsonManagedReference
 	private List<Image> image;
 
 	public Pin() {
 		
 	}
-	
+
+
 	public Pin(PinPojo pinPojo) {
 		this.id = pinPojo.getId();
 		this.name = pinPojo.getName();
@@ -80,7 +84,9 @@ public class Pin implements Serializable {
 		this.createdAt = pinPojo.getCreatedAt();
 		this.updatedAt = pinPojo.getUpdatedAt();
 		this.image = pinPojo.getImage();
+		this.folderId = pinPojo.getFolderId();
 	}
+	
 
 	public String getId() {
 		return id;
@@ -146,13 +152,12 @@ public class Pin implements Serializable {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-	@JsonIgnore
-	public Folder getFolderId() {
+	
+	public String getFolderId() {
 		return folderId;
 	}
 
-	public void setFolderId(Folder folderId) {
+	public void setFolderId(String folderId) {
 		this.folderId = folderId;
 	}
 

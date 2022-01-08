@@ -3,6 +3,7 @@ package com.pintoeat.api.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,10 +105,10 @@ public class FolderController {
 
 		long start = System.currentTimeMillis();
 		List<Folder> folder = new ArrayList<Folder>();
-		User user = userRepo.findByid(userid);
+		// User user = userRepo.findByid(userid);
 
 		try {
-			folder = folderRepo.findByuserId(user);
+			folder = folderRepo.findByuserId(userid);
 			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
 					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
 					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
@@ -129,11 +130,11 @@ public class FolderController {
 
 		long start = System.currentTimeMillis();
 		List<Folder> folder = new ArrayList<Folder>();
-		User user = userRepo.findByid(userid);
+		// User user = userRepo.findByid(userid);
 		List<FolderOutput> folderOutput = new ArrayList<FolderOutput>();
 
 		try {
-			folder = folderRepo.findByuserId(user);
+			folder = folderRepo.findByuserId(userid);
 			
 			// select only first pin and image priority = 1
 			for (int i = 0; i < folder.size(); i++) {
@@ -195,8 +196,32 @@ public class FolderController {
 		try {
 			if (body != null) {
 				if (body.getId() == null) {
+					body.setCreatedAt(new Date());
 					body.setId(Utils.UUID());
 				}
+				body.setUpdatedAt(new Date());
+				
+//				// set RowId Pin
+//				List<Pin> currentPin = body.getPin();
+//				if(currentPin != null) {
+//					for(Pin pinValue : currentPin) {
+//						if (pinValue.getId() == null) {
+//							pinValue.setId(Utils.UUID());
+//							pinValue.setFolderId(body);
+//						}
+//						
+//						// set RowId Image
+//						List<Image> currentImage = pinValue.getImage();
+//						if(currentImage != null) {
+//							for(Image imageValue : currentImage) {
+//								if (imageValue.getId() == null) {
+//									imageValue.setId(Utils.UUID());
+//									imageValue.setPinId(pinValue);
+//								}
+//							}
+//						}
+//					}
+//				}
 
 				folderRepo.save(body);
 				result.setRowId(body.getId());

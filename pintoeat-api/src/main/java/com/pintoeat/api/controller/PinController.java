@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pintoeat.api.model.Folder;
+import com.pintoeat.api.model.Image;
 import com.pintoeat.api.model.Pin;
 import com.pintoeat.api.model.User;
 import com.pintoeat.api.pojo.AddUpdateOutput;
@@ -106,10 +108,10 @@ public class PinController {
 
 		long start = System.currentTimeMillis();
 		List<Pin> pin = new ArrayList<Pin>();
-		Folder folder = folderRepo.findByid(folderid);
+		// Folder folder = folderRepo.findByid(folderid);
 
 		try {
-			pin = pinRepo.findByfolderId(folder);
+			pin = pinRepo.findByfolderId(folderid);
 			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
 					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
 					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
@@ -135,8 +137,21 @@ public class PinController {
 		try {
 			if (body != null) {
 				if (body.getId() == null) {
+					body.setCreatedAt(new Date());
 					body.setId(Utils.UUID());
 				}
+				body.setUpdatedAt(new Date());
+				
+//				// set RowId Image
+//				List<Image> currentImage = body.getImage();
+//				if(currentImage != null) {
+//					for(Image imageValue : currentImage) {
+//						if (imageValue.getId() == null) {
+//							imageValue.setId(Utils.UUID());
+//							imageValue.setPinId(body);
+//						}
+//					}
+//				}
 
 				pinRepo.save(body);
 				result.setRowId(body.getId());

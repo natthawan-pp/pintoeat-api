@@ -1,5 +1,5 @@
 # pintoeat-api
-* database on local (pintoeatdb) 06/01/22
+* database on Heroku (pintoeat-db) 06/01/22
 ## Require Resource
 * java JDK 1.8.0_191
 * Database MySql server version 5.5

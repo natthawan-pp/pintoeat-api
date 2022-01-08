@@ -16,7 +16,7 @@ public interface PinRepository extends CrudRepository<Pin, String> {
 	
 	public Pin findByname(String name);
 	
-	List<Pin> findByfolderId(Folder folder);
+	List<Pin> findByfolderId(String folder);
 	
 	@Query(value = "select pin.id, pin.folder_id, pin.name, pin.description, pin.location, pin.is_favorite, pin.is_bookmark, pin.created_at, pin.updated_at from pin join folder on folder.id = pin.folder_id \r\n"
 			+ "where is_bookmark = true and user_id =:userId", nativeQuery = true)

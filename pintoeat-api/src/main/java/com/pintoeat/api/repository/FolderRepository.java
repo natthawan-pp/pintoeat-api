@@ -14,5 +14,5 @@ public interface FolderRepository extends CrudRepository<Folder, String> {
 	
 	public Folder findByname(String name);
 	
-	List<Folder> findByuserId(User user);
+	List<Folder> findByuserId(String userid);
 }

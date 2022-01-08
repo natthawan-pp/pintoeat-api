@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.pintoeat.api.pojo.ImagePojo;
 import com.pintoeat.api.pojo.UserPojo;
 
 @Entity
@@ -47,15 +48,26 @@ public class Image implements Serializable {
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-	//bi-directional many-to-one association to DcCampaign
-	@ManyToOne
-	@JoinColumn(name="pin_id")
-	@JsonBackReference
-	private Pin pinId;
-
+	@Column(name = "pin_id")
+	private String pinId;
+	
+//	//bi-directional many-to-one association to Pin
+//	@ManyToOne
+//	@JoinColumn(name="pin_id")
+//	@JsonBackReference
+//	private Pin pinId;
 
 	public Image() {
 		
+	}
+	
+	public Image(ImagePojo imagePojo) {
+		this.id = imagePojo.getId();
+		this.image = imagePojo.getImage();
+		this.priority = imagePojo.getPriority();
+		this.createdAt = imagePojo.getCreatedAt();
+		this.updatedAt = imagePojo.getUpdatedAt();
+		this.pinId = imagePojo.getPinId();
 	}
 
 
@@ -108,13 +120,12 @@ public class Image implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	@JsonIgnore
-	public Pin getPinId() {
+	public String getPinId() {
 		return pinId;
 	}
 
 
-	public void setPinId(Pin pinId) {
+	public void setPinId(String pinId) {
 		this.pinId = pinId;
 	}
 	

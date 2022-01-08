@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pintoeat.api.model.Folder;
+import com.pintoeat.api.model.Image;
+import com.pintoeat.api.model.Pin;
 import com.pintoeat.api.model.User;
 import com.pintoeat.api.pojo.AddUpdateOutput;
 import com.pintoeat.api.pojo.UserPojo;
@@ -169,19 +171,51 @@ public class UserController {
 					checkNewUser = true;
 				}
 				body.setUpdatedAt(new Date());
-				
-				if (checkNewUser == true) {
-					// add default folder when create new user
-					List<Folder> folderList = new ArrayList<Folder>();
-					Folder folder = new Folder();
-					folder.setId(Utils.UUID());
-					folder.setUserId(body);
-					folder.setName("Default Folder");
-					folder.setCreatedAt(new Date());
-					folder.setUpdatedAt(new Date());
-					folderList.add(folder);
-					body.setFolder(folderList);
-				}
+			
+//				// add default folder when create new user
+//				if (checkNewUser == true) {
+//					List<Folder> folderList = new ArrayList<Folder>();
+//					Folder folder = new Folder();
+//					folder.setId(Utils.UUID());
+//					folder.setUserId(body);
+//					folder.setName("Default Folder");
+//					folder.setCreatedAt(new Date());
+//					folder.setUpdatedAt(new Date());
+//					folderList.add(folder);
+//					body.setFolder(folderList);
+//				}
+			
+//				// set RowId Folder
+//				List<Folder> currentFolder = body.getFolder();
+//				if(currentFolder != null) {
+//					for(Folder folderValue : currentFolder) {
+//						if (folderValue.getId() == null) {
+//							folderValue.setId(Utils.UUID());
+//							folderValue.setUserId(body);
+//						}
+//						// set RowId Pin
+//						List<Pin> currentPin = folderValue.getPin();
+//						if(currentPin != null) {
+//							for(Pin pinValue : currentPin) {
+//								if (pinValue.getId() == null) {
+//									pinValue.setId(Utils.UUID());
+//									pinValue.setFolderId(folderValue);
+//								}
+//								
+//								// set RowId Image
+//								List<Image> currentImage = pinValue.getImage();
+//								if(currentImage != null) {
+//									for(Image imageValue : currentImage) {
+//										if (imageValue.getId() == null) {
+//											imageValue.setId(Utils.UUID());
+//											imageValue.setPinId(pinValue);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
 				
 
 				userRepo.save(body);

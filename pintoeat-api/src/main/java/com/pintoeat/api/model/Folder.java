@@ -47,14 +47,17 @@ public class Folder implements Serializable {
 	@Column(name = "updated_at")
 	private Date updatedAt;
 	
-	// bi-directional many-to-one association to DcCampaign
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	@JsonBackReference
-	private User userId;
+	@Column(name = "user_id")
+	private String userId;
+	
+//	// bi-directional many-to-one association to User
+//	@ManyToOne
+//	@JoinColumn(name="user_id")
+//	@JsonBackReference
+//	private User userId;
 	
 	@OneToMany(mappedBy = "folderId", cascade = CascadeType.MERGE)
-	@JsonManagedReference
+//	@JsonManagedReference
 	private List<Pin> pin;
 
 	public Folder() {
@@ -68,7 +71,9 @@ public class Folder implements Serializable {
 		this.createdAt = folderPojo.getCreatedAt();
 		this.updatedAt = folderPojo.getUpdatedAt();
 		this.pin = folderPojo.getPin();
+		this.userId = folderPojo.getUserId();
 	}
+	
 
 	public String getId() {
 		return id;
@@ -110,15 +115,6 @@ public class Folder implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	@JsonIgnore
-	public User getUserId() {
-		return userId;
-	}
-
-	public void setUserId(User userId) {
-		this.userId = userId;
-	}
-
 	public List<Pin> getPin() {
 		return pin;
 	}
@@ -127,4 +123,12 @@ public class Folder implements Serializable {
 		this.pin = pin;
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 }

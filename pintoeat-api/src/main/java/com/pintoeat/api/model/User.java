@@ -56,9 +56,8 @@ public class User implements Serializable {
 	private Date updatedAt;
 	
 	@OneToMany(mappedBy = "userId", cascade = CascadeType.MERGE)
-	@JsonManagedReference
+//	@JsonManagedReference
 	private List<Folder> folder;
-
 
 	public User() {
 		
