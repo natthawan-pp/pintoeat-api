@@ -11,10 +11,12 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,10 +25,14 @@ import com.pintoeat.api.model.Image;
 import com.pintoeat.api.model.Pin;
 import com.pintoeat.api.model.User;
 import com.pintoeat.api.pojo.AddUpdateOutput;
+import com.pintoeat.api.pojo.ImageConvertPojo;
 import com.pintoeat.api.pojo.ImagePojo;
 import com.pintoeat.api.repository.ImageRepository;
 import com.pintoeat.api.utils.Utils;
-
+import java.util.Base64;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 @RestController
 @RequestMapping("/api/pintoeat-image")
@@ -99,7 +105,7 @@ public class ImageController {
 
 	@Transactional
 	@RequestMapping(value = "/addUpdate", method = RequestMethod.POST)
-	public @ResponseBody AddUpdateOutput addUpdate(@RequestBody ImagePojo pojo, HttpServletRequest request) {
+	public AddUpdateOutput addUpdate(@ModelAttribute ImageConvertPojo pojo, HttpServletRequest request) {
 		long start = System.currentTimeMillis();
 		AddUpdateOutput result = new AddUpdateOutput();
 		Image body = new Image(pojo);
@@ -161,6 +167,8 @@ public class ImageController {
 		}
 		return result;
 	}
+	
+
 	
 
 

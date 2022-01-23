@@ -142,6 +142,7 @@ public class FolderController {
 				data.setId(folder.get(i).getId());
 				data.setName(folder.get(i).getName());
 				data.setFavorite(folder.get(i).isFavorite());
+				data.setPinCount(folder.get(i).getPin().size());
 				if (folder.get(i).getPin().size() > 0) {
 					Pin pin = new Pin();
 					// get first pin

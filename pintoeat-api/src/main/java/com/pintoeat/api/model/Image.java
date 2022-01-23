@@ -1,8 +1,13 @@
 package com.pintoeat.api.model;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.sql.Blob;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +23,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.pintoeat.api.pojo.ImageConvertPojo;
 import com.pintoeat.api.pojo.ImagePojo;
 import com.pintoeat.api.pojo.UserPojo;
 
@@ -35,7 +43,7 @@ public class Image implements Serializable {
 	private String id;
 
 	@Column(name = "image") 
-	private byte[] image;
+	private String image;
 	
 	@Column(name = "priority")
 	private Integer priority;
@@ -61,13 +69,22 @@ public class Image implements Serializable {
 		
 	}
 	
-	public Image(ImagePojo imagePojo) {
-		this.id = imagePojo.getId();
-		this.image = imagePojo.getImage();
-		this.priority = imagePojo.getPriority();
-		this.createdAt = imagePojo.getCreatedAt();
-		this.updatedAt = imagePojo.getUpdatedAt();
-		this.pinId = imagePojo.getPinId();
+//	public Image(ImagePojo imagePojo) {
+//		this.id = imagePojo.getId();
+//		this.image = imagePojo.getImage();
+//		this.priority = imagePojo.getPriority();
+//		this.createdAt = imagePojo.getCreatedAt();
+//		this.updatedAt = imagePojo.getUpdatedAt();
+//		this.pinId = imagePojo.getPinId();
+//	}
+	
+	public Image(ImageConvertPojo imageConvertPojo) {
+		this.id = imageConvertPojo.getId();
+		this.image = encodeFileToBase64(imageConvertPojo.getImage());
+		this.priority = imageConvertPojo.getPriority();
+		this.createdAt = imageConvertPojo.getCreatedAt();
+		this.updatedAt = imageConvertPojo.getUpdatedAt();
+		this.pinId = imageConvertPojo.getPinId();
 	}
 
 
@@ -81,12 +98,12 @@ public class Image implements Serializable {
 	}
 
 
-	public byte[] getImage() {
+	public String getImage() {
 		return image;
 	}
 
 
-	public void setImage(byte[] image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 
@@ -129,6 +146,28 @@ public class Image implements Serializable {
 		this.pinId = pinId;
 	}
 	
+	private static String encodeFileToBase64(MultipartFile multipartFile) {
+	    try {
+//	        byte[] fileContent = Files.readAllBytes(multipartFile.toPath());
+//	        return Base64.getEncoder().encodeToString(fileContent);
+	    	File file = convertMultiPartToFile(multipartFile);
+	    	byte[] fileContent = Files.readAllBytes(file.toPath());
+	    	String addIn = "data:image/jpeg;base64,/";
+	    	String base64String = Base64.getEncoder().encodeToString(fileContent);
+	    	String newString = base64String.substring(0,0) + addIn + base64String.substring(1);
+	    	return newString;
+	    } catch (IOException e) {
+	        throw new IllegalStateException("could not read file " + multipartFile, e);
+	    }
+	}
+	
+	 private static File convertMultiPartToFile(MultipartFile file) throws IOException{
+	       File convFile = new File( file.getOriginalFilename() );
+	       FileOutputStream fos = new FileOutputStream( convFile );
+	       fos.write( file.getBytes() );
+	       fos.close();
+	       return convFile;
+	 }
 	
 
 }

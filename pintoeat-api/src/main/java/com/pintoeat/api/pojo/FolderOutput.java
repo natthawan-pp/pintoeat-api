@@ -12,6 +12,7 @@ public class FolderOutput {
 	private String name;
 	private boolean isFavorite;
 	private List<Pin> pin;
+	private Integer pinCount; 
 	
 	public FolderOutput () {
 		
@@ -54,6 +55,14 @@ public class FolderOutput {
 
 	public void setPin(List<Pin> pin) {
 		this.pin = pin;
+	}
+
+	public Integer getPinCount() {
+		return pinCount;
+	}
+
+	public void setPinCount(Integer pinCount) {
+		this.pinCount = pinCount;
 	} 
 	
 	

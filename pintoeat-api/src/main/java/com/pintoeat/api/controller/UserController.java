@@ -130,15 +130,11 @@ public class UserController {
 				result.setRowId(user.getId());
 				request.getSession().setAttribute("USER_ID", user.getId());
 				result.setResponseMsg("Login Success");
-//				String messages = (String) request.getSession().getAttribute("USER_ID");
 			} else {
 				result.setRowId(email);
 				result.setResponseMsg("Invalid Email or Password");
 			}
 				
-			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
-					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
-					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
 			cdrLogger.info(Utils.printCdrLog(request.getRemoteAddr(),
 					Thread.currentThread().getStackTrace()[1].getMethodName(), request.getRequestURI(),
 					Utils.SUCCESS_CODE, Utils.SUCCESS_MSG, start));
@@ -162,29 +158,30 @@ public class UserController {
 		AddUpdateOutput result = new AddUpdateOutput();
 		User body = new User(pojo);
 		boolean checkNewUser = false;
+		String id = Utils.UUID();
 		
 		try {
 			if (body != null) {
 				if (body.getId() == null) {
-					body.setId(Utils.UUID());
+					body.setId(id);
 					body.setCreatedAt(new Date());
 					checkNewUser = true;
 				}
 				body.setUpdatedAt(new Date());
 			
-//				// add default folder when create new user
-//				if (checkNewUser == true) {
-//					List<Folder> folderList = new ArrayList<Folder>();
-//					Folder folder = new Folder();
-//					folder.setId(Utils.UUID());
-//					folder.setUserId(body);
-//					folder.setName("Default Folder");
-//					folder.setCreatedAt(new Date());
-//					folder.setUpdatedAt(new Date());
-//					folderList.add(folder);
-//					body.setFolder(folderList);
-//				}
-			
+				// add default folder when create new user
+				if (checkNewUser == true) {
+					List<Folder> folderList = new ArrayList<Folder>();
+					Folder folder = new Folder();
+					folder.setId(Utils.UUID());
+					folder.setUserId(id);
+					folder.setName("Default Folder");
+					folder.setCreatedAt(new Date());
+					folder.setUpdatedAt(new Date());
+					folderList.add(folder);
+					body.setFolder(folderList);
+				}
+//			
 //				// set RowId Folder
 //				List<Folder> currentFolder = body.getFolder();
 //				if(currentFolder != null) {
@@ -268,7 +265,6 @@ public class UserController {
 		return result;
 	}
 	
-
 
 }
 
