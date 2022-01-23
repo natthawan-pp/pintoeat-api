@@ -23,7 +23,9 @@ import com.pintoeat.api.model.Image;
 import com.pintoeat.api.model.Pin;
 import com.pintoeat.api.model.User;
 import com.pintoeat.api.pojo.AddUpdateOutput;
+import com.pintoeat.api.pojo.LoginOutput;
 import com.pintoeat.api.pojo.UserPojo;
+import com.pintoeat.api.repository.FolderRepository;
 import com.pintoeat.api.repository.UserRepository;
 import com.pintoeat.api.utils.Utils;
 
@@ -37,6 +39,8 @@ public class UserController {
 	
 	@Autowired
 	UserRepository userRepo;
+	@Autowired
+	FolderRepository folderRepo;
 	
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public List<User> getAll(HttpServletRequest request) {
@@ -116,22 +120,27 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/loginUser/{email}/{password}", method = RequestMethod.GET)
-	public @ResponseBody AddUpdateOutput loginUser(@PathVariable("email") String email, @PathVariable("password") String password,
+	public @ResponseBody LoginOutput loginUser(@PathVariable("email") String email, @PathVariable("password") String password,
 			HttpServletRequest request) {
 		long start = System.currentTimeMillis();
-		AddUpdateOutput result = new AddUpdateOutput();
+		LoginOutput result = new LoginOutput();
 		User user = new User();
+		List<Folder> folder = new ArrayList<Folder>();
+		String defaultFolderId = null;
 
 		try {
 			user = userRepo.findByemailAndPassword(email, password);
-			request.getSession().invalidate();
+			folder = folderRepo.findByuserId(user.getId());
 			
 			if (user != null) {
-				result.setRowId(user.getId());
-				request.getSession().setAttribute("USER_ID", user.getId());
+				result.setUserId(user.getId());
 				result.setResponseMsg("Login Success");
+				if (folder != null) {
+					defaultFolderId = folder.get(0).getId();
+					result.setDefaultFolderId(defaultFolderId);
+				}
 			} else {
-				result.setRowId(email);
+				result.setUserId(email);
 				result.setResponseMsg("Invalid Email or Password");
 			}
 				

@@ -25,6 +25,7 @@ import com.pintoeat.api.model.User;
 import com.pintoeat.api.pojo.AddUpdateOutput;
 import com.pintoeat.api.pojo.FolderOutput;
 import com.pintoeat.api.pojo.FolderPojo;
+import com.pintoeat.api.pojo.LoginOutput;
 import com.pintoeat.api.pojo.NearByOutput;
 import com.pintoeat.api.repository.FolderRepository;
 import com.pintoeat.api.repository.UserRepository;
@@ -273,6 +274,7 @@ public class FolderController {
 		}
 		return result;
 	}
+	
 	
 
 }

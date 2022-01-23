@@ -13,6 +13,7 @@ com\pintoeat\api\pojo\ImagePojo.class
 com\pintoeat\api\repository\ImageRepository.class
 com\pintoeat\api\pojo\FolderPojo.class
 com\pintoeat\api\controller\FolderController.class
+com\pintoeat\api\pojo\LoginOutput.class
 com\pintoeat\api\repository\FolderRepository.class
 com\pintoeat\api\utils\Utils.class
 com\pintoeat\api\pojo\FolderOutput.class
